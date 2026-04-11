@@ -1,0 +1,166 @@
+" =============================================================================
+" Minimal DevOps .vimrc — no plugins, no nonsense
+" =============================================================================
+
+" --- Basics ---
+set nocompatible
+filetype plugin indent on
+syntax on
+
+set encoding=utf-8
+set hidden                      " switch buffers without saving
+set autoread                    " reload files changed outside vim
+set backspace=indent,eol,start  " backspace works like you'd expect
+set clipboard=unnamedplus       " yank goes to system clipboard
+set wildmenu                    " tab completion in command mode
+set wildmode=longest:full,full
+
+" --- Appearance ---
+set number                      " line numbers
+set relativenumber              " relative numbers for easy jumping (5j, 12k)
+set cursorline                  " highlight current line
+set signcolumn=yes              " always show sign column (no layout shift)
+set laststatus=2                " always show status line
+set showcmd
+set showmode
+set scrolloff=8                 " keep 8 lines visible above/below cursor
+set sidescrolloff=8
+set termguicolors               " true color if your terminal supports it
+colorscheme koehler
+
+" --- Status line (no plugin needed) ---
+set statusline=
+set statusline+=\ %f            " filename
+set statusline+=\ %m%r          " modified/readonly flags
+set statusline+=\ %y            " filetype
+set statusline+=%=              " right align
+set statusline+=\ %l:%c         " line:column
+set statusline+=\ [%p%%]        " percentage through file
+
+" --- Search ---
+set incsearch                   " search as you type
+set hlsearch                    " highlight matches
+set ignorecase                  " case insensitive...
+set smartcase                   " ...unless you use uppercase
+" press Escape twice to clear search highlight
+nnoremap <Esc><Esc> :nohlsearch<CR>
+
+" --- Indentation ---
+set autoindent
+set smartindent
+set expandtab                   " spaces not tabs
+set tabstop=2                   " 2-space indent (standard for YAML/HCL/k8s)
+set shiftwidth=2
+set softtabstop=2
+
+" --- Splits ---
+set splitbelow                  " new horizontal splits go below
+set splitright                  " new vertical splits go right
+
+" --- Undo & backup ---
+set undofile                    " persistent undo across sessions
+set undodir=~/.vim/undodir
+set noswapfile                  " no .swp clutter
+set nobackup
+" Create undo directory if it doesn't exist
+if !isdirectory($HOME . '/.vim/undodir')
+  call mkdir($HOME . '/.vim/undodir', 'p')
+endif
+
+" --- Leader key ---
+let mapleader = ' '             " space as leader
+
+" --- Quality of life keymaps ---
+" Quick save
+nnoremap <leader>w :w<CR>
+" Quick quit
+nnoremap <leader>q :q<CR>
+" Quick buffer switching
+nnoremap <leader>b :ls<CR>:b<Space>
+" Next/prev buffer
+nnoremap <leader>n :bnext<CR>
+nnoremap <leader>p :bprev<CR>
+" Split navigation without Ctrl-W prefix
+nnoremap <C-h> <C-w>h
+nnoremap <C-j> <C-w>j
+nnoremap <C-k> <C-w>k
+nnoremap <C-l> <C-w>l
+" Open file explorer
+nnoremap <leader>e :Explore<CR>
+" Quick grep (uses ripgrep if available, falls back to grep)
+if executable('rg')
+  set grepprg=rg\ --vimgrep\ --smart-case
+endif
+nnoremap <leader>g :grep<Space>
+
+" --- Filetype-specific settings ---
+
+" YAML (k8s manifests, ansible, docker-compose)
+autocmd FileType yaml setlocal tabstop=2 shiftwidth=2 expandtab
+autocmd FileType yaml setlocal cursorcolumn   " vertical guide helps with indentation
+
+" Terraform / HCL
+autocmd BufRead,BufNewFile *.tf,*.tfvars set filetype=terraform
+autocmd FileType terraform setlocal tabstop=2 shiftwidth=2 expandtab
+autocmd FileType terraform setlocal commentstring=#\ %s
+
+" Dockerfile
+autocmd BufRead,BufNewFile Dockerfile* set filetype=dockerfile
+
+" Shell scripts
+autocmd FileType sh,bash,zsh setlocal tabstop=4 shiftwidth=4 expandtab
+autocmd FileType sh,bash,zsh setlocal makeprg=shellcheck\ -f\ gcc\ %
+" Run shellcheck on current file with :make
+" Then use :copen to see results, :cn/:cp to navigate
+
+" Ansible (detect by path)
+autocmd BufRead,BufNewFile */playbooks/*.yml,*/roles/*.yml set filetype=yaml.ansible
+
+" Jenkinsfile
+autocmd BufRead,BufNewFile Jenkinsfile set filetype=groovy
+
+" Helm templates
+autocmd BufRead,BufNewFile */templates/*.yaml,*/templates/*.tpl set filetype=helm
+autocmd FileType helm setlocal commentstring={{/*\ %s\ */}}
+
+" Makefile (must use tabs)
+autocmd FileType make setlocal noexpandtab tabstop=4 shiftwidth=4
+
+" JSON (pretty format with gq using jq)
+if executable('jq')
+  autocmd FileType json setlocal formatprg=jq\ .
+endif
+
+" --- Handy commands for devops ---
+
+" Format JSON in current buffer
+command! JSONFormat :%!jq .
+
+" Format YAML in current buffer (requires yq)
+command! YAMLFormat :%!yq .
+
+" Diff current buffer against saved version
+command! DiffOrig vert new | set bt=nofile | r ++edit # | 0d_ | diffthis | wincmd p | diffthis
+
+" Strip trailing whitespace
+command! StripWhitespace :%s/\s\+$//e
+
+" --- Netrw (built-in file explorer) ---
+let g:netrw_banner = 0          " hide the banner
+let g:netrw_liststyle = 3       " tree view
+let g:netrw_winsize = 25        " 25% width
+
+" --- ALE (linting) ---
+let g:ale_linters = {
+\   'json': ['jsonlint'],
+\   'yaml': ['yamllint'],
+\   'sh': ['shellcheck'],
+\   'bash': ['shellcheck'],
+\}
+
+let g:ale_lint_on_text_changed = 'never'
+let g:ale_lint_on_save = 1
+
+nmap <leader>j <Plug>(ale_next_wrap)
+nmap <leader>k <Plug>(ale_previous_wrap)
+nmap <leader>d <Plug>(ale_detail)
