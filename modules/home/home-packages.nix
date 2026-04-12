@@ -2,10 +2,18 @@
   home.packages = with pkgs; [
     keepass
     ripgrep
-    htop
-    tmux
     claude-code
   ];
+
+  programs.htop.enable = true;
+
+  programs.tmux.enable = true;
+
+  programs.ssh = {
+    enable = true;
+    addKeysToAgent = "yes";
+  };
+  services.ssh-agent.enable = true;
 
   programs.direnv = {
     enable = true;
