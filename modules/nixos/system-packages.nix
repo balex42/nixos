@@ -3,11 +3,7 @@
     vim
   ];
 
-  programs.git = {
-    enable = true;
-    userName  = "balex42";
-    userEmail = "alex@bien.koeln";
-  };
+  programs.git.enable = true;
 
   programs.firefox.enable = true;
 
