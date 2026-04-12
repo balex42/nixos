@@ -27,9 +27,12 @@
       options = [ "fmask=0077" "dmask=0077" ];
     };
 
+
   swapDevices =
     [ { device = "/dev/mapper/luks-b946d8de-fa93-49e1-8b08-443fa8d4d7b9"; }
     ];
+
+  boot.initrd.luks.devices."luks-b946d8de-fa93-49e1-8b08-443fa8d4d7b9".device = "/dev/disk/by-uuid/b946d8de-fa93-49e1-8b08-443fa8d4d7b9";
 
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
   hardware.cpu.intel.npu.enable = true;
