@@ -1,6 +1,7 @@
 { config, pkgs, ... }: {
   environment.systemPackages = with pkgs; [
     vim
+    brave
   ];
 
   fonts.packages = with pkgs; [
@@ -11,7 +12,5 @@
 
   programs.firefox.enable = true;
 
-  virtualisation.podman = {
-    enable = true;
-  };
+  virtualisation.podman.enable = true;
 }
