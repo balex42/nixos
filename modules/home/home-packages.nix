@@ -6,7 +6,12 @@
 
   programs.htop.enable = true;
 
-  programs.tmux.enable = true;
+  home.sessionVariables.EDITOR = "vim";
+
+  programs.tmux = {
+    enable = true;
+    keyMode = "vi";
+  };
 
   programs.ssh = {
     enable = true;
