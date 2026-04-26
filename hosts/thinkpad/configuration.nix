@@ -86,7 +86,7 @@
   users.users.alex = {
     isNormalUser = true;
     description = "Alexander Bien";
-    extraGroups = [ "networkmanager" "wheel" ];
+    extraGroups = [ "networkmanager" "wheel" "docker" ];
     packages = with pkgs; [
     #  thunderbird
     ];

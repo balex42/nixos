@@ -45,10 +45,11 @@
   };
 
   programs.vscode = {
-  enable = true;
-  extensions = with pkgs.vscode-extensions; [
-    mkhl.direnv
-    jnoortheen.nix-ide
-  ];
-};
+    enable = true;
+    extensions = with pkgs.vscode-extensions; [
+      ms-vscode-remote.remote-containers
+      mkhl.direnv
+      jnoortheen.nix-ide
+    ];
+  };
 }
