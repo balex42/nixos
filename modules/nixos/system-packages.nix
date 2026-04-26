@@ -4,10 +4,6 @@
     brave
   ];
 
-  fonts.packages = with pkgs; [
-    jetbrains-mono
-  ];
-
   programs.git.enable = true;
 
   programs.firefox.enable = true;

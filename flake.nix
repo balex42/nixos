@@ -19,6 +19,7 @@
         system = "x86_64-linux";
         modules = [
           ./hosts/nuc/configuration.nix
+          ./modules/shared/fonts.nix
           home-manager.nixosModules.home-manager
           {
             home-manager.useGlobalPkgs = true;
@@ -31,6 +32,7 @@
         system = "x86_64-linux";
         modules = [
           ./hosts/thinkpad/configuration.nix
+          ./modules/shared/fonts.nix
           home-manager.nixosModules.home-manager
           {
             home-manager.useGlobalPkgs = true;
@@ -45,6 +47,7 @@
       system = "aarch64-darwin";
       modules = [
         ./hosts/macbook/configuration.nix
+        ./modules/shared/fonts.nix
         home-manager.darwinModules.home-manager
         {
           home-manager.useGlobalPkgs = true;
