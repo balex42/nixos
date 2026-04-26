@@ -10,10 +10,26 @@
     home = "/Users/alex";
   };
 
-  environment.systemPackages = [
-    pkgs.vim
-    pkgs.git
+  system.primaryUser = "alex";
+
+  environment.systemPackages = with pkgs;[
+    vim
+    git
+    docker
+    docker-compose
+    colima
   ];
+
+  launchd.user.agents.colima = {
+    command = "${pkgs.colima}/bin/colima start --foreground";
+    serviceConfig = {
+      KeepAlive = true;
+      RunAtLoad = true;
+      StandardOutPath = "/tmp/colima.out.log";
+      StandardErrorPath = "/tmp/colima.err.log";
+    };
+    path = [ pkgs.docker pkgs.coreutils ];
+  };
 
   system.stateVersion = 6;
 
