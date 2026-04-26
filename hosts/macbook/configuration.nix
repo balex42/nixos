@@ -28,4 +28,10 @@
       /bin/ln -sfn "$src" "/Applications/Nix Apps/$app_name"
     done
   '';
+
+  nixpkgs.overlays = [
+    (final: prev: {
+      direnv = prev.direnv.overrideAttrs (_: { doCheck = false; });
+    })
+  ];
 }
