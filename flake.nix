@@ -49,6 +49,7 @@
         {
           home-manager.useGlobalPkgs = true;
           home-manager.useUserPackages = true;
+          home-manager.backupFileExtension  = "pre-nix";
           home-manager.users.alex = import ./hosts/macbook/home.nix;
         }
       ];

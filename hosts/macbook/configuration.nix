@@ -1,7 +1,14 @@
 { pkgs, ... }: {
   nixpkgs.hostPlatform = "aarch64-darwin";
 
-  nix.settings.experimental-features = [ "nix-command" "flakes" ];
+  nixpkgs.config.allowUnfree = true;
+
+  nix.enable = false;
+
+  users.users.alex = {
+    name = "alex";
+    home = "/Users/alex";
+  };
 
   environment.systemPackages = [
     pkgs.vim

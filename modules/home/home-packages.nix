@@ -1,9 +1,8 @@
 { config, pkgs, ... }: {
   home.packages = with pkgs; [
-    keepass
     ripgrep
     claude-code
-  ];
+  ] ++ lib.optional pkgs.stdenv.isLinux keepass;
 
   programs.htop.enable = true;
 
@@ -11,7 +10,10 @@
 
   programs.ssh = {
     enable = true;
-    addKeysToAgent = "yes";
+    enableDefaultConfig = false;
+    matchBlocks."*" = {
+      addKeysToAgent = "yes";
+    };
   };
   services.ssh-agent.enable = true;
 
@@ -46,7 +48,7 @@
 
   programs.vscode = {
     enable = true;
-    extensions = with pkgs.vscode-extensions; [
+    profiles.default.extensions = with pkgs.vscode-extensions; [
       ms-vscode-remote.remote-containers
       mkhl.direnv
       jnoortheen.nix-ide
