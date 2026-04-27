@@ -32,22 +32,16 @@
     extraConfig = builtins.readFile ./vim/vimrc;
   };
 
-  programs.alacritty = {
+  programs.ghostty = {
     enable = true;
     settings = {
-      font = {
-        normal.family = "JetBrains Mono";
-        size = 12;
-      };
-      scrolling.history = 10000;
-      window = {
-        opacity = 0.95;
-        padding = { x = 8; y = 8; };
-      };
-      terminal.shell = {
-        program = "${pkgs.tmux}/bin/tmux";
-        args = [ "new-session" "-A" "-s" "main" ];
-      };
+      font-family = "JetBrains Mono";
+      font-size = 12;
+      scrollback-limit = 10000;
+      background-opacity = 0.95;
+      window-padding-x = 8;
+      window-padding-y = 8;
+      command = "${pkgs.tmux}/bin/tmux new-session -A -s main";
     };
   };
 
