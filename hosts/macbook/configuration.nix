@@ -41,7 +41,8 @@
       -exec readlink '{}' + |
     while read -r src; do
       app_name=$(basename "$src")
-      /bin/ln -sfn "$src" "/Applications/Nix Apps/$app_name"
+      echo "copying $app_name" >&2
+      ${pkgs.rsync}/bin/rsync -a --delete "$src/" "/Applications/Nix Apps/$app_name"
     done
   '';
 
