@@ -10,6 +10,7 @@
       ./hardware-configuration.nix
       ../../modules/nixos/system-packages.nix
       ../../modules/nixos/ollama.nix
+      ../../modules/nixos/tailscale.nix
     ];
 
   # Bootloader.

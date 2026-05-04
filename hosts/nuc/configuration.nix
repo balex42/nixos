@@ -9,6 +9,7 @@
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
       ../../modules/nixos/system-packages.nix
+      ../../modules/nixos/tailscale.nix
     ];
 
   # Bootloader.
