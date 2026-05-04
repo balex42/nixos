@@ -22,6 +22,15 @@
   };
   services.ssh-agent.enable = true;
 
+  programs.bash = {
+    enable = true;
+    shellAliases.k = "kubectl";
+    initExtra = ''
+      source <(kubectl completion bash)
+      complete -o default -F __start_kubectl k
+    '';
+  };
+
   programs.direnv = {
     enable = true;
     nix-direnv.enable = true;

@@ -2,6 +2,7 @@
   environment.systemPackages = with pkgs; [
     vim
     brave
+    kubectl
   ];
 
   programs.git.enable = true;
